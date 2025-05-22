@@ -27,6 +27,6 @@
         <tb:TaskbarIcon x:Name="myNotifyIcon"
                 Visibility="Visible" 
                 ToolTipText="Click to show control panel" 
-                TrayLeftMouseDown="myNotifyIcon_TrayLeftMouseDown"/>
+                TrayLeftMouseDown="myNotifyIcon_TrayLeftMouseDown" IconSource="/umbrella.png"/>
     </Grid>
 </Window>
