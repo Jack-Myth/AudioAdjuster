@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -520,6 +521,6 @@ public partial class MainWindow : Window
 
     private void Doc_Click(object sender, RoutedEventArgs e)
     {
-        Process.Start("https://github.com/Jack-Myth/AudioAdjuster");
+        Process.Start(new ProcessStartInfo("https://github.com/Jack-Myth/AudioAdjuster") { UseShellExecute = true });
     }
 }

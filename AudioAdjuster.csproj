@@ -22,4 +22,10 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Doc.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
