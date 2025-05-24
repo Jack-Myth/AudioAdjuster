@@ -449,10 +449,8 @@ public partial class MainWindow : Window
         {
             if (app.Value == 0)
                 continue;
-            float volumn = 100;
-            bool muted = false;
-            VolumnStatus.TryGetValue(app.Value, out volumn);
-            MuteStatus.TryGetValue(app.Value, out muted);
+            float volumn = VolumnStatus.GetValueOrDefault(app.Value, 100);
+            bool muted = MuteStatus.GetValueOrDefault(app.Value, false);
             AudioHelper.SetApplicationVolume(app.Value, volumn);
             AudioHelper.SetApplicationMute(app.Value, muted);
         }

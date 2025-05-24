@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="48"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Text="Audio Adjuster" FontSize="24" HorizontalAlignment="Center" Margin="10"/>
         <ListBox x:Name="AppList" Grid.Row="1" Margin="5"/>
