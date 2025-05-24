@@ -34,7 +34,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Slider Orientation="Vertical" HorizontalAlignment="Center" Height="auto" ValueChanged="Slider_ValueChanged" Maximum="100" />
-            <Label Grid.Row="1" Name="TargetVolumn" Content="0" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Name="TargetVolumn" Content="0%" HorizontalAlignment="Center"/>
         </Grid>
         <tb:TaskbarIcon x:Name="myNotifyIcon"
                 Visibility="Visible" 

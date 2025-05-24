@@ -263,7 +263,7 @@ public class AudioHelper
             IAudioSessionControl ctl;
             sessionEnumerator.GetSession(i, out ctl);
             string session;
-            (ctl as IAudioSessionControl2).GetSessionIdentifier(out session);
+            (ctl as IAudioSessionControl2)!.GetSessionIdentifier(out session);
             session = session.Substring(session.IndexOf('|') + 1);
             string PIDStr = session.Substring(session.LastIndexOf("b") + 1);
             int PID = 0;
@@ -313,7 +313,7 @@ public class AudioHelper
             IAudioSessionControl ctl;
             sessionEnumerator.GetSession(i, out ctl);
             string session;
-            (ctl as IAudioSessionControl2).GetSessionIdentifier(out session);
+            (ctl as IAudioSessionControl2)!.GetSessionIdentifier(out session);
             string PIDStr = session.Substring(session.LastIndexOf("b") + 1);
             int PID = 0;
             if (!PIDStr.Contains("#"))
@@ -369,6 +369,7 @@ public partial class MainWindow : Window
     {
         RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
         InitializeComponent();
+        DoRefresh();
     }
 
     private void DoRefresh()
@@ -511,6 +512,6 @@ public partial class MainWindow : Window
     private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         TargetVolumnValue = (int)e.NewValue;
-        TargetVolumn.Content = TargetVolumnValue;
+        TargetVolumn.Content = $"{TargetVolumnValue}%";
     }
 }
