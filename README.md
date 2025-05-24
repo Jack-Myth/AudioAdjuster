@@ -6,4 +6,4 @@
 
 写的比较匆忙，凑合用  
 
-![Preview](Doc.jpg)
+![Doc](Doc.jpg)
