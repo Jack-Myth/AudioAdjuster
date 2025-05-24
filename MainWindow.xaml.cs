@@ -356,12 +356,18 @@ public partial class MainWindow : Window
 
     private HashSet<KeyValuePair<string,int>> FocusableApps = new HashSet<KeyValuePair<string, int>>();
 
+    private Dictionary<int, float> VolumnStatus = new Dictionary<int, float>();
+    private Dictionary<int, bool> MuteStatus = new Dictionary<int, bool>();
+
     private int FocusingAppPid = 0;
+
+    int TargetVolumnValue = 0;
 
     private WinEventDelegate? HoldingDelegate = null;
 
     public MainWindow()
     {
+        RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
         InitializeComponent();
     }
 
@@ -371,27 +377,26 @@ public partial class MainWindow : Window
         var Applications = AudioHelper.EnumerateApplications();
         foreach (var app in Applications)
         {
+            if (app.Value == 0)
+                continue;
             CheckBox cb = new CheckBox();
-            cb.Content = app;
-            cb.DataContext = app;
+            cb.Content = string.Format("PID:{0},EXE:{1}", System.IO.Path.GetFileName(app.Key), app.Value);
             cb.IsChecked = FocusableApps.Contains(app);
-            cb.Checked += AppItem_CheckStateChanged;
-            cb.Unchecked += AppItem_CheckStateChanged;
+            RoutedEventHandler Handler = (object sender, RoutedEventArgs e) =>
+            {
+                CheckBox cb = (CheckBox)sender;
+                if (cb.IsChecked == true)
+                {
+                    FocusableApps.Add(app);
+                }
+                else
+                {
+                    FocusableApps.Remove(app);
+                }
+            };
+            cb.Unchecked += Handler;
+            cb.Checked += Handler;
             this.AppList.Items.Add(cb);
-        }
-    }
-
-    private void AppItem_CheckStateChanged(object sender, RoutedEventArgs e)
-    {
-        CheckBox cb = (CheckBox)sender;
-        KeyValuePair<string, int> app = (KeyValuePair<string, int>)cb.DataContext;
-        if (cb.IsChecked == true)
-        {
-            FocusableApps.Add(app);
-        }
-        else
-        {
-            FocusableApps.Remove(app);
         }
     }
 
@@ -408,11 +413,28 @@ public partial class MainWindow : Window
     {
         FocusingAppPid = FocusAppPID;
         var Applications = AudioHelper.EnumerateApplications();
+        VolumnStatus.Clear();
+        MuteStatus.Clear();
+        bool TargetMute = TargetVolumnValue == 0;
         foreach (var app in Applications)
         {
+            if (app.Value == 0)
+                continue;
+            float? volumn = AudioHelper.GetApplicationVolume(app.Value);
+            bool? muted = AudioHelper.GetApplicationMute(app.Value);
+            VolumnStatus.Add(app.Value, volumn.GetValueOrDefault(100));
+            MuteStatus.Add(app.Value, muted.GetValueOrDefault(false));
             if (app.Value != FocusingAppPid)
             {
-                AudioHelper.SetApplicationMute(app.Value, true);
+                if (TargetMute == true)
+                {
+                    // 如果需要静音，就不调整音量了
+                    AudioHelper.SetApplicationMute(app.Value, true);
+                }
+                else
+                {
+                    AudioHelper.SetApplicationVolume(app.Value, TargetVolumnValue);
+                }
             }
         }
         AudioHelper.SetApplicationMute(FocusingAppPid, false);
@@ -424,8 +446,17 @@ public partial class MainWindow : Window
         var Applications = AudioHelper.EnumerateApplications();
         foreach (var app in Applications)
         {
-            AudioHelper.SetApplicationMute(app.Value, false);
+            if (app.Value == 0)
+                continue;
+            float volumn = 100;
+            bool muted = false;
+            VolumnStatus.TryGetValue(app.Value, out volumn);
+            MuteStatus.TryGetValue(app.Value, out muted);
+            AudioHelper.SetApplicationVolume(app.Value, volumn);
+            AudioHelper.SetApplicationMute(app.Value, muted);
         }
+        VolumnStatus.Clear();
+        MuteStatus.Clear();
     }
 
     public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
@@ -475,5 +506,11 @@ public partial class MainWindow : Window
     {
         // this.Visibility = Visibility.Visible;
         this.Show();
+    }
+
+    private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        TargetVolumnValue = (int)e.NewValue;
+        TargetVolumn.Content = TargetVolumnValue;
     }
 }

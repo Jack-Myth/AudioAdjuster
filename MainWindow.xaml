@@ -12,6 +12,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="32"/>
+        </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Text="Audio Adjuster" FontSize="24" HorizontalAlignment="Center" Margin="10"/>
         <ListBox x:Name="AppList" Grid.Row="1" Margin="5"/>
         <Grid Grid.Row="2">
@@ -23,6 +27,14 @@
             <Button x:Name="Refresh" Grid.Column="0" Content="刷新" Padding="1" Margin="5" Click="Refresh_Click"/>
             <Button x:Name="Apply" Grid.Column="1" Content="应用" Padding="1" Margin="5" Click="Apply_Click"/>
             <Button x:Name="Restore" Grid.Column="2" Content="复原" Padding="1" Margin="5" Click="Restore_Click"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.RowSpan="2" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Slider Orientation="Vertical" HorizontalAlignment="Center" Height="auto" ValueChanged="Slider_ValueChanged" Maximum="100" />
+            <Label Grid.Row="1" Name="TargetVolumn" Content="0" HorizontalAlignment="Center"/>
         </Grid>
         <tb:TaskbarIcon x:Name="myNotifyIcon"
                 Visibility="Visible" 
