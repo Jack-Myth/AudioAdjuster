@@ -381,7 +381,7 @@ public partial class MainWindow : Window
             if (app.Value == 0)
                 continue;
             CheckBox cb = new CheckBox();
-            cb.Content = string.Format("PID:{0},EXE:{1}", System.IO.Path.GetFileName(app.Key), app.Value);
+            cb.Content = string.Format("PID:{0},EXE:{1}", app.Value, System.IO.Path.GetFileName(app.Key));
             cb.IsChecked = FocusableApps.Contains(app);
             RoutedEventHandler Handler = (object sender, RoutedEventArgs e) =>
             {
@@ -511,5 +511,15 @@ public partial class MainWindow : Window
     {
         TargetVolumnValue = (int)e.NewValue;
         TargetVolumn.Content = $"{TargetVolumnValue}%";
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+        DoUnfocus();
+    }
+
+    private void Doc_Click(object sender, RoutedEventArgs e)
+    {
+        Process.Start("https://github.com/Jack-Myth/AudioAdjuster");
     }
 }
